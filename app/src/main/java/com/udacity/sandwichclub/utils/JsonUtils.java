@@ -57,7 +57,7 @@ public class JsonUtils {
             //Else condition to handle empty ingredients case and display useful default.
             if (ingredientsArray != null && ingredientsArray.length() > 0){
                 for (int i = 0; i < ingredientsArray.length(); i++){
-                    ingredients.add(akaArray.getString(i));
+                    ingredients.add(ingredientsArray.getString(i));
                 }
             }else{
                 ingredients.add("Unavailable");
@@ -66,7 +66,7 @@ public class JsonUtils {
             return new Sandwich(mainName, alsoKnownAs, placeOfOrigin, description, imageString, ingredients);
 
         } catch (JSONException e) {
-            Log.e(TAG, "Error parsing JSON: " + e.getMessage());
+            Log.e(TAG, "Error parsing JSON: " + e.getStackTrace());
             return null;
         }
     }
