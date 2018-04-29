@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -15,12 +16,24 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    private TextView descriptionTv;
+    private TextView akaTv;
+    private TextView originTv;
+    private TextView ingredientsTv;
+
+    private ImageView ingredientsIv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView ingredientsIv = findViewById(R.id.image_iv);
+        descriptionTv = findViewById(R.id.description_tv);
+        akaTv = findViewById(R.id.aka_tv);
+        originTv = findViewById(R.id.origin_tv);
+        ingredientsTv = findViewById(R.id.ingredients_tv);
+
+        ingredientsIv = findViewById(R.id.image_iv);
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -43,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +69,27 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        descriptionTv.setText(sandwich.getDescription());
+
+        StringBuilder sb = new StringBuilder();
+        for (String alias : sandwich.getAlsoKnownAs()){
+            sb.append(alias);
+            sb.append(", ");
+        }
+        akaTv.setText(sb.toString().substring(0, sb.toString().length() -2));
+
+        originTv.setText(sandwich.getPlaceOfOrigin());
+
+        //Reallocate to clear and use for ingredient list.
+        sb = new StringBuilder();
+
+        for (String ingredient : sandwich.getIngredients()){
+            sb.append(ingredient);
+            sb.append(", ");
+        }
+
+        ingredientsTv.setText(sb.toString().substring(0, sb.toString().length() -2));
 
     }
 }
