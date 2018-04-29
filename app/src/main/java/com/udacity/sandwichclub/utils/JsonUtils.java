@@ -16,7 +16,6 @@ public class JsonUtils {
     private static final String TAG = JsonUtils.class.getSimpleName();
 
     private static final String JSON_NAME_ARRAY_KEY = "name";
-    private static final String JSON_AKA_KEY = "alsoKnownAs";
     private static final String JSON_ORIGIN_KEY = "placeOfOrigin";
     private static final String JSON_DESCRIPTION_KEY = "description";
     private static final String JSON_IMAGE_KEY = "image";
@@ -33,11 +32,10 @@ public class JsonUtils {
             JSONArray akaArray = nameArray.getJSONArray(JSON_AKA_INDEX);
             JSONArray ingredientsArray = sandwichJson.getJSONArray(JSON_INGREDIENTS_KEY);
 
-            List<String> alsoKnownAs = new ArrayList<>();
-
             String mainName = nameArray.getString(JSON_MAIN_NAME_INDEX);
 
-            //Else condition to handle empty akaArray case and still display something to user.
+            List<String> alsoKnownAs = new ArrayList<>();
+            //Else condition to handle empty akaArray case and display useful default.
             if (akaArray != null && akaArray.length() > 0){
                 for (int i = 0; i < akaArray.length(); i++){
                     alsoKnownAs.add(akaArray.getString(i));
@@ -46,29 +44,31 @@ public class JsonUtils {
                 alsoKnownAs.add("No alternate names");
             }
 
-            //Conditional assignment to handle empty origin with "Unknown" default.
+            //Conditional assignment to handle empty origin with useful default.
             String originString = sandwichJson.getString(JSON_ORIGIN_KEY);
             String placeOfOrigin = (originString != null && !originString.isEmpty() ? originString : "Unknown");
 
-            String description =
+            //Conditional assignment to handle empty description with useful default.
+            String descriptionString = sandwichJson.getString(JSON_DESCRIPTION_KEY);
+            String description = (descriptionString != null && !descriptionString.isEmpty() ? descriptionString : "Unavailable");
 
+            String imageString = sandwichJson.getString(JSON_IMAGE_KEY);
 
+            List<String> ingredients = new ArrayList<>();
+            //Else condition to handle empty ingredients case and display useful default.
+            if (ingredientsArray != null && ingredientsArray.length() > 0){
+                for (int i = 0; i < ingredientsArray.length(); i++){
+                    ingredients.add(akaArray.getString(i));
+                }
+            }else{
+                ingredients.add("Unavailable");
+            }
 
-
-            return new Sandwich(mainName, alsoKnownAs, placeOfOrigin, )
+            return new Sandwich(mainName, alsoKnownAs, placeOfOrigin, description, imageString, ingredients);
 
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing JSON: " + e.getMessage());
+            return null;
         }
-
-        return null;
     }
 }
-
-//Property references while working through JSON parsing.
-//    private String mainName;
-//    private List<String> alsoKnownAs = null;
-//    private String placeOfOrigin;
-//    private String description;
-//    private String image;
-//    private List<String> ingredients = null;
