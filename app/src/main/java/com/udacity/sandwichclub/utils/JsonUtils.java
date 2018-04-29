@@ -66,7 +66,7 @@ public class JsonUtils {
             return new Sandwich(mainName, alsoKnownAs, placeOfOrigin, description, imageString, ingredients);
 
         } catch (JSONException e) {
-            Log.e(TAG, "Error parsing JSON: " + e.getStackTrace());
+            Log.e(TAG, "Error parsing JSON: " + e.getMessage());
             return null;
         }
     }
