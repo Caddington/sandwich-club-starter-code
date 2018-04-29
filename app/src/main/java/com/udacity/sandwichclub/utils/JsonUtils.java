@@ -15,24 +15,23 @@ public class JsonUtils {
 
     private static final String TAG = JsonUtils.class.getSimpleName();
 
-    private static final String JSON_NAME_ARRAY_KEY = "name";
+    private static final String JSON_NAME_KEY = "name";
+    private static final String JSON_MAIN_NAME_KEY = "mainName";
+    private static final String JSON_AKA_KEY = "alsoKnownAs";
     private static final String JSON_ORIGIN_KEY = "placeOfOrigin";
     private static final String JSON_DESCRIPTION_KEY = "description";
     private static final String JSON_IMAGE_KEY = "image";
     private static final String JSON_INGREDIENTS_KEY = "ingredients";
 
-    private static final int JSON_MAIN_NAME_INDEX = 0;
-    private static final int JSON_AKA_INDEX = 1;
-
     public static Sandwich parseSandwichJson(String json) {
 
         try {
             JSONObject sandwichJson = new JSONObject(json);
-            JSONArray nameArray = sandwichJson.getJSONArray(JSON_NAME_ARRAY_KEY);
-            JSONArray akaArray = nameArray.getJSONArray(JSON_AKA_INDEX);
+            JSONObject nameObject = sandwichJson.getJSONObject(JSON_NAME_KEY);
+            JSONArray akaArray = nameObject.getJSONArray(JSON_AKA_KEY);
             JSONArray ingredientsArray = sandwichJson.getJSONArray(JSON_INGREDIENTS_KEY);
 
-            String mainName = nameArray.getString(JSON_MAIN_NAME_INDEX);
+            String mainName = nameObject.getString(JSON_MAIN_NAME_KEY);
 
             List<String> alsoKnownAs = new ArrayList<>();
             //Else condition to handle empty akaArray case and display useful default.
